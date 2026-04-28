@@ -234,6 +234,8 @@ impl OsvDb {
     /// [`Self::last_modified`] is updated to the highest timestamp seen.
     ///
     /// Returns an [`Iterator`] that yields each newly added or updated [`OsvRecord`].
+    /// The iterator may yield a duplicate [`OsvRecord`] for the same ID, because records
+    /// can be modified (not just added) between syncs.
     pub async fn sync(
         &self
     ) -> Result<impl Iterator<Item = Result<OsvRecord, ReadRecordErr>> + Send, SyncErr> {
@@ -357,6 +359,7 @@ async fn download_archive_for_ecosystem(
     chunk_size: u64,
 ) -> Result<DateTime<Utc>, DownloadLatestErr> {
     download_and_extract_osv_archive(client, ecosystem, &path, chunk_size).await?;
+    // TODO: swap the order, so osv file would be downloaded first.
     let mut csv_rdr = download_osv_modified_csv(client, ecosystem)
         .await
         .map_err(DownloadLatestErr::Download)?;

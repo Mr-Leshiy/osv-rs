@@ -4,7 +4,7 @@ use serde::{Deserialize, Deserializer, Serialize, de};
 use strum::{Display, EnumString};
 
 /// Ecosystem name, optionally with a suffix (e.g. `"Debian:10"`).
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct EcosystemWithSuffix(Ecosystem, Option<String>);
 
 /// Represents an OSV ecosystem, as defined by the OSV schema.

@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 /// An external reference for the vulnerability.
-#[derive(Debug, Clone, Deserialize, Serialize)]
+#[derive(Debug, Clone, Deserialize, Serialize, PartialEq, Eq)]
 pub struct Reference {
     /// Classification of this reference.
     #[serde(rename = "type")]

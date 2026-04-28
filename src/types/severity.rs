@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 /// A severity rating expressed in a specific scoring system.
-#[derive(Debug, Clone, Deserialize, Serialize)]
+#[derive(Debug, Clone, Deserialize, Serialize, PartialEq, Eq)]
 pub struct Severity {
     /// The scoring system used.
     #[serde(rename = "type")]
