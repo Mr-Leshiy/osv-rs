@@ -26,7 +26,7 @@ pub type OsvRecordId = String;
 /// Root OSV vulnerability record.
 ///
 /// See <https://ossf.github.io/osv-schema/> for the full specification.
-#[derive(Debug, Clone, Deserialize, Serialize)]
+#[derive(Debug, Clone, Deserialize, Serialize, PartialEq, Eq)]
 pub struct OsvRecord {
     /// Unique vulnerability identifier (e.g. `RUSTSEC-2024-0001`).
     pub id: OsvRecordId,

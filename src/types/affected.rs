@@ -4,7 +4,7 @@ use serde_json::Value;
 use crate::types::{Package, Range, Severity};
 
 /// A single affected package entry.
-#[derive(Debug, Clone, Deserialize, Serialize)]
+#[derive(Debug, Clone, Deserialize, Serialize, PartialEq, Eq)]
 pub struct Affected {
     /// The affected package identity.
     #[serde(skip_serializing_if = "Option::is_none")]

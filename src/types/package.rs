@@ -5,7 +5,7 @@ use crate::types::EcosystemWithSuffix;
 pub type PackageName = String;
 
 /// Identity of an affected package within its ecosystem.
-#[derive(Debug, Clone, Deserialize, Serialize)]
+#[derive(Debug, Clone, Deserialize, Serialize, PartialEq, Eq)]
 pub struct Package {
     /// Ecosystem name, optionally with a suffix (e.g. `"Debian:10"`).
     pub ecosystem: EcosystemWithSuffix,

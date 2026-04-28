@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 /// A credit entry for a person or organization.
-#[derive(Debug, Clone, Deserialize, Serialize)]
+#[derive(Debug, Clone, Deserialize, Serialize, PartialEq, Eq)]
 pub struct Credit {
     /// Name of the credited person or organization.
     pub name: String,

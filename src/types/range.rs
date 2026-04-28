@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
 /// A version range describing when a package is vulnerable.
-#[derive(Debug, Clone, Deserialize, Serialize)]
+#[derive(Debug, Clone, Deserialize, Serialize, PartialEq, Eq)]
 pub struct Range {
     /// The versioning scheme.
     #[serde(rename = "type")]
@@ -35,7 +35,7 @@ pub enum RangeType {
 ///
 /// Each variant is deserialised from a JSON object with a single key, matching
 /// the OSV `oneOf` constraint.
-#[derive(Debug, Clone, Deserialize, Serialize)]
+#[derive(Debug, Clone, Deserialize, Serialize, PartialEq, Eq)]
 #[serde(untagged)]
 pub enum Event {
     /// The (inclusive) version at which the vulnerability was introduced.
