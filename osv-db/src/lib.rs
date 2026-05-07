@@ -27,8 +27,8 @@ use crate::{
         DownloadLatestErr, DownloaderErr, GetRecordErr, OsvDbNewErr, ReadRecordErr, RecordsIterErr,
         SyncErr,
     },
-    osv_gs::{osv_archive_url, osv_modified_id_csv_url, osv_record_url},
     modified_record::OsvModifiedRecord,
+    osv_gs::{osv_archive_url, osv_modified_id_csv_url, osv_record_url},
 };
 
 const OSV_RECORD_FILE_EXTENSION: &str = "json";
