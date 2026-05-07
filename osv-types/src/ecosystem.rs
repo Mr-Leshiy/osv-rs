@@ -110,7 +110,7 @@ pub enum Ecosystem {
 }
 
 impl EcosystemWithSuffix {
-    /// Returns the [`crate::types::Ecosystem`] variant, without the suffix.
+    /// Returns the [`crate::Ecosystem`] variant, without the suffix.
     #[must_use]
     pub fn ecosystem(&self) -> Ecosystem {
         self.0

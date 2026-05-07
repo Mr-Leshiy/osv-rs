@@ -10,7 +10,7 @@ pub struct Reference {
     pub url: String,
 }
 
-/// Classification of an external [`crate::types::Reference`].
+/// Classification of an external [`crate::Reference`].
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
 pub enum ReferenceType {
     /// A published security advisory.

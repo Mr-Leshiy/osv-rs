@@ -2,7 +2,7 @@
 
 mod downloader;
 pub mod errors;
-mod modified_record;
+pub mod modified_record;
 mod osv_gs;
 
 use std::{
