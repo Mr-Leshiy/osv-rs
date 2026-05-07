@@ -1,6 +1,6 @@
 [workspace]
 resolver = "3"
-members = [
+members = ["osv-analyzer",
     "osv-db",
     "osv-types"
 ]
