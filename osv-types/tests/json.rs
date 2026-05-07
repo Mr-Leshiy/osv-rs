@@ -1,3 +1,5 @@
+#![allow(clippy::unwrap_used)]
+
 use osv_types::OsvRecord;
 use test_case::test_case;
 
