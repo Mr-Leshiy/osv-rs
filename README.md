@@ -17,3 +17,4 @@ Official [OSV Documentation](https://google.github.io/osv.dev/) · [OSV Schema](
 |-------|-------------|
 | [`osv-types`](osv-types/) | Rust types for OSV objects |
 | [`osv-db`](osv-db/) | Download and query the OSV database locally |
+| [`osv-analyzer`](osv-analyzer/) | Manifest analysis for OSV ecosystems |

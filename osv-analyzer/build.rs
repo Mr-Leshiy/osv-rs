@@ -1,0 +1,58 @@
+//! Build script for osv-analyzer: compiles libosv-scalibr into a static C archive.
+
+#![allow(
+    clippy::unwrap_used,
+    clippy::expect_used,
+    clippy::missing_docs_in_private_items
+)]
+
+use std::{
+    env, fs,
+    path::{Path, PathBuf},
+    process::Command,
+};
+
+fn watch_dir(dir: &Path) {
+    for entry in fs::read_dir(dir).unwrap() {
+        let path = entry.unwrap().path();
+        if path.is_dir() {
+            watch_dir(&path);
+        } else {
+            println!("cargo:rerun-if-changed={}", path.display());
+        }
+    }
+}
+
+fn main() {
+    if env::var("DOCS_RS").is_ok() {
+        return;
+    }
+
+    let manifest_dir = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap());
+    watch_dir(&manifest_dir.join("libosv-scalibr"));
+    let go_dir = manifest_dir.join("libosv-scalibr");
+    let out_dir = PathBuf::from(env::var("OUT_DIR").unwrap());
+    let lib_out = out_dir.join("libosv-scalibr.a");
+
+    let status = Command::new("go")
+        .args([
+            "build",
+            "-buildmode=c-archive",
+            "-o",
+            lib_out.to_str().expect("lib_out path is not valid UTF-8"),
+            ".",
+        ])
+        .current_dir(&go_dir)
+        .status()
+        .expect("failed to run go build");
+
+    assert!(status.success(), "go build failed");
+
+    println!("cargo:rustc-link-search=native={}", out_dir.display());
+    println!("cargo:rustc-link-lib=static=osv-scalibr");
+
+    if cfg!(target_os = "macos") {
+        println!("cargo:rustc-link-lib=framework=CoreFoundation");
+        println!("cargo:rustc-link-lib=framework=Security");
+    }
+}

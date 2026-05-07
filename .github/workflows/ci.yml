@@ -10,7 +10,7 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  build:
+  lints:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -26,6 +26,39 @@ jobs:
         run: cargo doc
       - name: Deny
         uses: EmbarkStudios/cargo-deny-action@v2
-      - name: Unit tests
-        run: cargo test
+
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: aarch64-apple-darwin
+            os: macos-14
+          - target: aarch64-unknown-linux-gnu
+            os: ubuntu-24.04-arm
+          - target: x86_64-apple-darwin
+            os: macos-15-intel
+          - target: x86_64-unknown-linux-gnu
+            os: ubuntu-22.04
+          # TODO: fix it
+          # - target: x86_64-unknown-linux-musl
+          #   os: ubuntu-latest
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: ${{ matrix.target }}
+      - uses: actions/setup-go@v6
+        with:
+          go-version: '1.24'
+      - name: Install musl-tools dependencies
+        if: ${{ matrix.target == 'x86_64-unknown-linux-musl' }}
+        run: sudo apt-get install -y musl-tools lld
+      - name: Run unit tests
+        run: cargo test --target ${{ matrix.target }}
+
 

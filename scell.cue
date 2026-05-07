@@ -13,6 +13,9 @@ main: {
 		"rustup component add rustfmt",
 		"apt-get update --fix-missing",
 		"apt-get -y install git curl wget",
+		// golang 
+        "apt install golang -y",
+        "go version",
 		// claude code
 		"curl -fsSL https://claude.ai/install.sh | bash",
 		// install Github Cli
