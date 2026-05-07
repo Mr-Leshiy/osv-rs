@@ -15,4 +15,5 @@ Official [OSV Documentation](https://google.github.io/osv.dev/) · [OSV Schema](
 
 | Crate | Description |
 |-------|-------------|
+| [`osv-types`](osv-types/) | Rust types for OSV objects |
 | [`osv-db`](osv-db/) | Download and query the OSV database locally |
