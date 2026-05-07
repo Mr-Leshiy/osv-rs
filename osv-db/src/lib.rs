@@ -2,8 +2,8 @@
 
 mod downloader;
 pub mod errors;
+pub mod modified_record;
 mod osv_gs;
-pub mod types;
 
 use std::{
     fs::File,
@@ -17,6 +17,7 @@ use std::{
 
 use bytes::Bytes;
 use chrono::{DateTime, Utc};
+use osv_types::{OsvRecord, OsvRecordId};
 use tempfile::tempdir_in;
 
 pub use crate::osv_gs::{OsvGsEcosystem, OsvGsEcosystems};
@@ -26,8 +27,8 @@ use crate::{
         DownloadLatestErr, DownloaderErr, GetRecordErr, OsvDbNewErr, ReadRecordErr, RecordsIterErr,
         SyncErr,
     },
+    modified_record::OsvModifiedRecord,
     osv_gs::{osv_archive_url, osv_modified_id_csv_url, osv_record_url},
-    types::{OsvModifiedRecord, OsvRecord, OsvRecordId},
 };
 
 const OSV_RECORD_FILE_EXTENSION: &str = "json";
@@ -109,7 +110,7 @@ impl OsvDb {
             .tempdir_in(self.location())
     }
 
-    /// Looks up a single OSV record by its [`crate::types::OsvRecordId`].
+    /// Looks up a single OSV record by its [`osv_types::OsvRecordId`].
     ///
     /// Returns `Ok(None)` if no record matching `id` exists.
     ///
@@ -147,11 +148,11 @@ impl OsvDb {
         Ok(Some(osv_record))
     }
 
-    /// Returns an [`Iterator`] over every [`crate::types::OsvRecord`] stored in the
+    /// Returns an [`Iterator`] over every [`osv_types::OsvRecord`] stored in the
     /// database.
     ///
     /// Files are read and parsed synchronously. Each record is yielded as
-    /// `Ok(`[`crate::types::OsvRecord`]`)`. I/O or parse failures yield an [`Err`] item
+    /// `Ok(`[`osv_types::OsvRecord`]`)`. I/O or parse failures yield an [`Err`] item
     /// without terminating the iterator.
     pub fn records(
         &self

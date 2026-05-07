@@ -1,6 +1,6 @@
 use chrono::{DateTime, Utc};
+use osv_types::OsvRecordId;
 
-use super::OsvRecordId;
 use crate::{errors::ParseModifiedRecordErr, osv_gs::OsvGsEcosystem};
 
 /// A single entry from a `modified_id.csv` index file.

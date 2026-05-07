@@ -1339,7 +1339,7 @@ checksum = "7c87def4c32ab89d880effc9e097653c8da5d6ef28e6b539d313baaacfbafcbe"
 
 [[package]]
 name = "osv-db"
-version = "0.6.1"
+version = "0.6.2"
 dependencies = [
  "anyhow",
  "bytes",
@@ -1348,6 +1348,7 @@ dependencies = [
  "futures",
  "itertools",
  "jsonschema",
+ "osv-types",
  "reqwest",
  "serde",
  "serde_json",
@@ -1357,6 +1358,20 @@ dependencies = [
  "thiserror 2.0.18",
  "tokio",
  "zip",
+]
+
+[[package]]
+name = "osv-types"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "jsonschema",
+ "reqwest",
+ "serde",
+ "serde_json",
+ "strum",
+ "test-case",
+ "tokio",
 ]
 
 [[package]]

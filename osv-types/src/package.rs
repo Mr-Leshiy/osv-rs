@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use crate::types::EcosystemWithSuffix;
+use crate::EcosystemWithSuffix;
 
 pub type PackageName = String;
 

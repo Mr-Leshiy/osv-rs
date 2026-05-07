@@ -1,7 +1,6 @@
 mod affected;
 mod credit;
 mod ecosystem;
-mod modified_record;
 mod package;
 mod range;
 mod reference;
@@ -13,7 +12,6 @@ pub use affected::Affected;
 use chrono::{DateTime, Utc};
 pub use credit::{Credit, CreditType};
 pub use ecosystem::{Ecosystem, EcosystemWithSuffix};
-pub use modified_record::OsvModifiedRecord;
 pub use package::{Package, PackageName};
 pub use range::{Event, Range, RangeType};
 pub use reference::{Reference, ReferenceType};
@@ -57,7 +55,7 @@ pub struct OsvRecord {
     pub details: Option<String>,
     /// Severity ratings at the root level.
     ///
-    /// When present, per-package severity in [`crate::types::Affected`] must be `null`.
+    /// When present, per-package severity in [`crate::Affected`] must be `null`.
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub severity: Vec<Severity>,
     /// Packages and version ranges affected by this vulnerability.

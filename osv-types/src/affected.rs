@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-use crate::types::{Package, Range, Severity};
+use crate::{Package, Range, Severity};
 
 /// A single affected package entry.
 #[derive(Debug, Clone, Deserialize, Serialize, PartialEq, Eq)]
