@@ -2,15 +2,15 @@
 
 #![allow(clippy::unwrap_used)]
 
-use osv_analyzer::{Manifest, Package};
+use osv_analyzer::{Manifest, ManifestPackage};
 use test_case::test_case;
 
 fn pkg(
     name: &str,
     version: &str,
     ecosystem: &str,
-) -> Package {
-    Package {
+) -> ManifestPackage {
+    ManifestPackage {
         name: name.to_owned(),
         version: version.to_owned(),
         ecosystem: ecosystem.parse().unwrap(),
@@ -38,7 +38,7 @@ fn pkg(
 fn extract_packages(
     manifest_path: &str,
     ecosystem: &str,
-) -> Vec<Package> {
+) -> Vec<ManifestPackage> {
     let data = std::fs::read(manifest_path).unwrap();
     let manifest = Manifest::extract(ecosystem, &data).unwrap();
     manifest.iter().collect::<Result<Vec<_>, _>>().unwrap()

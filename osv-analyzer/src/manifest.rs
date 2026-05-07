@@ -8,7 +8,7 @@ use thiserror::Error;
 
 use crate::{
     ffi,
-    package::{Package, PackageError},
+    package::{ManifestPackage, PackageError},
 };
 
 /// An opaque handle to a Go-managed list of extracted packages.
@@ -107,7 +107,7 @@ pub struct PackageIter<'a> {
 }
 
 impl Iterator for PackageIter<'_> {
-    type Item = Result<Package, PackageError>;
+    type Item = Result<ManifestPackage, PackageError>;
 
     fn next(&mut self) -> Option<Self::Item> {
         if self.idx >= self.manifest.len() {
@@ -115,7 +115,7 @@ impl Iterator for PackageIter<'_> {
         }
         let idx = self.idx;
         self.idx = self.idx.saturating_add(1);
-        Some(Package::new(self.manifest.0, idx))
+        Some(ManifestPackage::new(self.manifest.0, idx))
     }
 }
 

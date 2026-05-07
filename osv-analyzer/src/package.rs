@@ -14,7 +14,7 @@ use crate::ffi;
 
 /// A single package extracted from a manifest file.
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
-pub struct Package {
+pub struct ManifestPackage {
     /// Package name.
     pub name: PackageName,
     /// Package version string.
@@ -34,7 +34,7 @@ pub enum PackageError {
     UnknownEcosystem(#[from] strum::ParseError),
 }
 
-impl Package {
+impl ManifestPackage {
     /// Constructs a [`Package`] by reading the fields of the package at `idx`
     /// from the Go-managed manifest identified by `manifest`.
     ///
