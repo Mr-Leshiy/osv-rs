@@ -1,6 +1,6 @@
 use test_case::test_case;
 
-use super::OsvRecord;
+use crate::OsvRecord;
 
 #[test_case("GHSA-8rf9-c59g-f82f.json")]
 #[test_case("MAL-2026-1429.json")]
@@ -9,7 +9,7 @@ use super::OsvRecord;
 async fn json_serde_roundtrip(path: &str) {
     const VERSION: &str = "v1.7.5";
 
-    let record_file = std::fs::File::open(format!("src/types/tests/{path}")).unwrap();
+    let record_file = std::fs::File::open(format!("src/tests/{path}")).unwrap();
     let record: OsvRecord = serde_json::from_reader(record_file).unwrap();
     let record_json = serde_json::to_value(record).unwrap();
 

@@ -52,6 +52,8 @@ arithmetic_side_effects = "deny"
 missing_errors_doc = "allow"
 
 [workspace.dependencies]
+osv-types = { path = "osv-types" }
+
 tokio = { version = "1.48.0", features = ["fs", "macros", "sync", "rt-multi-thread"] }
 reqwest = "0.13.0"
 

@@ -1348,6 +1348,7 @@ dependencies = [
  "futures",
  "itertools",
  "jsonschema",
+ "osv-types",
  "reqwest",
  "serde",
  "serde_json",

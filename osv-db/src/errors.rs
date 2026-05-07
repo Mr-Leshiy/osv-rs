@@ -54,7 +54,7 @@ pub enum ReadRecordErr {
     Json(#[source] serde_json::Error),
 }
 
-/// Error returned by [`crate::types::OsvModifiedRecord::try_from_csv_record`].
+/// Error returned by [`crate::modified_record::OsvModifiedRecord::try_from_csv_record`].
 #[derive(Debug, Error)]
 pub enum ParseModifiedRecordErr {
     /// The CSV row did not have exactly 2 columns.
