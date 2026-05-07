@@ -1,7 +1,8 @@
 [workspace]
 resolver = "3"
 members = [
-    "osv-db"
+    "osv-db",
+    "osv-types"
 ]
 
 [workspace.package]
@@ -49,3 +50,17 @@ unreachable = "deny"
 missing_docs_in_private_items = "allow"
 arithmetic_side_effects = "deny"
 missing_errors_doc = "allow"
+
+[workspace.dependencies]
+tokio = { version = "1.48.0", features = ["fs", "macros", "sync", "rt-multi-thread"] }
+reqwest = "0.13.0"
+
+strum = { version = "0.26", features = ["derive"] }
+
+serde = { version = "1.0.0", features = ["derive"] }
+serde_json = "1.0.0"
+jsonschema = { version = "0.46.0", default-features = false }
+
+chrono = { version = "0.4.0", features = ["serde"] }
+
+test-case = "3.3.1"

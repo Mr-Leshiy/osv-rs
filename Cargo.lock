@@ -1360,6 +1360,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "osv-types"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "jsonschema",
+ "reqwest",
+ "serde",
+ "serde_json",
+ "strum",
+ "test-case",
+ "tokio",
+]
+
+[[package]]
 name = "outref"
 version = "0.5.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
