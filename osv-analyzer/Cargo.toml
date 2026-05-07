@@ -8,7 +8,11 @@ license.workspace = true
 authors.workspace = true
 repository.workspace = true
 
-[dependencies]
-
 [lints]
 workspace = true
+
+[dependencies]
+thiserror.workspace = true
+
+[dev-dependencies]
+test-case.workspace = true
