@@ -13,7 +13,7 @@ fn pkg(
     Package {
         name: name.to_owned(),
         version: version.to_owned(),
-        ecosystem: ecosystem.to_owned(),
+        ecosystem: ecosystem.parse().unwrap(),
     }
 }
 

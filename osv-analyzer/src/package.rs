@@ -7,25 +7,32 @@ use std::{
     ptr,
 };
 
+use osv_types::{EcosystemWithSuffix, PackageName};
 use thiserror::Error;
 
 use crate::ffi;
 
 /// A single package extracted from a manifest file.
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct Package {
     /// Package name.
-    pub name: String,
+    pub name: PackageName,
     /// Package version string.
     pub version: String,
     /// OSV ecosystem identifier (e.g. `"npm"`, `"PyPI"`, `"crates.io"`).
-    pub ecosystem: String,
+    pub ecosystem: EcosystemWithSuffix,
 }
 
-/// Errors returned when reading a package field from the C library.
+/// Errors returned when constructing a [`Package`].
 #[derive(Debug, Error)]
-#[error("package field error: {0}")]
-pub struct PackageError(String);
+pub enum PackageError {
+    /// A C field accessor returned an error.
+    #[error("package field error: {0}")]
+    Field(String),
+    /// The ecosystem string returned by the extractor is not a known OSV ecosystem.
+    #[error("unknown ecosystem: {0}")]
+    UnknownEcosystem(#[from] strum::ParseError),
+}
 
 impl Package {
     /// Constructs a [`Package`] by reading the fields of the package at `idx`
@@ -40,7 +47,7 @@ impl Package {
     ) -> Result<Self, PackageError> {
         let name = read_field(manifest, idx, manifest_package_name)?;
         let version = read_field(manifest, idx, manifest_package_version)?;
-        let ecosystem = read_field(manifest, idx, manifest_package_ecosystem)?;
+        let ecosystem = read_field(manifest, idx, manifest_package_ecosystem)?.parse()?;
         Ok(Self {
             name,
             version,
@@ -82,7 +89,7 @@ fn read_field(
         let msg = CStr::from_ptr(err).to_string_lossy().into_owned();
         ffi::free(err.cast::<c_void>());
         if !msg.is_empty() {
-            return Err(PackageError(msg));
+            return Err(PackageError::Field(msg));
         }
         let s = CStr::from_ptr(out).to_string_lossy().into_owned();
         ffi::free(out.cast::<c_void>());
