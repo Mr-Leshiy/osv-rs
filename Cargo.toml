@@ -1,14 +1,18 @@
-[package]
-name = "osv-db"
-version = "0.6.1"
+[workspace]
+resolver = "3"
+members = [
+    "osv-db"
+]
+
+[workspace.package]
 edition = "2024"
+license = "MIT OR Apache-2.0"
 authors = [
     "Oleksii Pozhylenkov (Mr-Leshiy) <leshiy12345678@gmail.com>"
 ]
-description = "A Rust library for syncing and querying the OSV (Open Source Vulnerabilities) database"
-license = "Apache-2.0"
+repository = "https://github.com/Mr-Leshiy/osv-rs"
 
-[lints.rust]
+[workspace.lints.rust]
 unexpected_cfgs = { level = "warn", check-cfg = ['cfg(track_caller)'] }
 warnings = "deny"
 missing_docs = "allow"
@@ -18,7 +22,7 @@ single_use_lifetimes = "deny"
 trivial_casts = "deny"
 trivial_numeric_casts = "deny"
 
-[lints.rustdoc]
+[workspace.lints.rustdoc]
 broken_intra_doc_links = "deny"
 invalid_codeblock_attributes = "deny"
 invalid_html_tags = "deny"
@@ -26,7 +30,7 @@ invalid_rust_codeblocks = "deny"
 bare_urls = "deny"
 unescaped_backticks = "deny"
 
-[lints.clippy]
+[workspace.lints.clippy]
 pedantic = { level = "deny", priority = -1 }
 unwrap_used = "deny"
 expect_used = "deny"
@@ -45,23 +49,3 @@ unreachable = "deny"
 missing_docs_in_private_items = "allow"
 arithmetic_side_effects = "deny"
 missing_errors_doc = "allow"
-
-[dependencies]
-tokio = { version = "1.48.0", features = ["fs", "macros", "sync", "rt-multi-thread"] }
-futures = "0.3"
-serde = { version = "1.0.228", features = ["derive"] }
-serde_json = "1.0.145"
-reqwest = "0.13.2"
-bytes = "1.11.1"
-chrono = { version = "0.4.44", features = ["serde"] }
-thiserror = "2"
-csv = "1"
-zip = "2"
-strum = { version = "0.26", features = ["derive"] }
-tempfile = "3.26.0"
-itertools = "0.14.0"
-
-[dev-dependencies]
-anyhow = "1.0.102"
-test-case = "3.3.1"
-jsonschema = { version = "0.46.0", default-features = false }

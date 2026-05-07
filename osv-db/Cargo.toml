@@ -1,0 +1,33 @@
+[package]
+name = "osv-db"
+version = "0.6.1"
+description = "A Rust library for syncing and querying the OSV (Open Source Vulnerabilities) database"
+readme = "README.md"
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+tokio = { version = "1.48.0", features = ["fs", "macros", "sync", "rt-multi-thread"] }
+futures = "0.3"
+serde = { version = "1.0.228", features = ["derive"] }
+serde_json = "1.0.145"
+reqwest = "0.13.2"
+bytes = "1.11.1"
+chrono = { version = "0.4.44", features = ["serde"] }
+thiserror = "2"
+csv = "1"
+zip = "2"
+strum = { version = "0.26", features = ["derive"] }
+tempfile = "3.26.0"
+itertools = "0.14.0"
+
+[dev-dependencies]
+anyhow = "1.0.102"
+test-case = "3.3.1"
+jsonschema = { version = "0.46.0", default-features = false }
+
