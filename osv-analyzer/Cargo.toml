@@ -16,7 +16,6 @@ osv-types.workspace = true
 
 thiserror.workspace = true
 strum.workspace = true
-dashmap = "6.1.0"
 
 anyhow = "1.0.102"
 
