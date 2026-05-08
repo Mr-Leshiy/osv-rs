@@ -16,11 +16,11 @@ use osv_types::Ecosystem;
 fn main() -> Result<(), VersionError> {
     // npm uses SemVer — patch bump
     let v1 = Version::new("1.2.3", Ecosystem::Npm)?;
-    let v2 = Version::new("1.2.4",  Ecosystem::Npm)?;
+    let v2 = Version::new("1.2.4", Ecosystem::Npm)?;
     println!("npm  1.2.3 < 1.2.4 : {}", v1 < v2);
 
     // PyPI pre-release ordering
-    let alpha = Version::new("1.0a1",  Ecosystem::PyPI)?;
+    let alpha = Version::new("1.0a1", Ecosystem::PyPI)?;
     let stable = Version::new("1.0", Ecosystem::PyPI)?;
     println!("PyPI 1.0a1 < 1.0   : {}", alpha < stable);
 
