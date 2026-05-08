@@ -32,6 +32,7 @@ fn pkg(
 #[test_case(pkg("tokio", "38.0.0", "crates.io"), "RUSTSEC-2025-0112" => false)]
 #[test_case(pkg("github.com/Tencent/WeKnora", "0.2.0", "Go"), "GHSA-8rf9-c59g-f82f" => true)]
 #[test_case(pkg("github.com/Tencent/WeKnora", "0.3.0", "Go"), "GHSA-8rf9-c59g-f82f" => false)]
+#[allow(clippy::needless_pass_by_value)]
 fn evaluate_against_osv_record(
     p: ManifestPackage,
     osv_record_id: &str,
