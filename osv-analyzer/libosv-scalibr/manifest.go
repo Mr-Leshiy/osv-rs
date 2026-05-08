@@ -19,9 +19,9 @@ import (
 
 func newExtractor(ecosystem string) (filesystem.Extractor, error) {
 	switch ecosystem {
-	case "uv.lock":
+	case "Uv":
 		return uvlock.New(nil)
-	case "Cargo.lock":
+	case "Cargo":
 		return cargolock.New(nil)
 	default:
 		return nil, fmt.Errorf("unsupported ecosystem: %q", ecosystem)

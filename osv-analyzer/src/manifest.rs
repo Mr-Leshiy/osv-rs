@@ -4,11 +4,12 @@
 
 use std::ffi::{CStr, CString, NulError, c_char, c_void};
 
+use strum::{Display, EnumString, IntoStaticStr};
 use thiserror::Error;
 
 use crate::{
     ffi,
-    package::{Package, PackageError},
+    package::{ManifestPackage, PackageError},
 };
 
 /// An opaque handle to a Go-managed list of extracted packages.
@@ -17,6 +18,17 @@ use crate::{
 /// The underlying Go handle is released automatically when the value is dropped.
 #[derive(Debug)]
 pub struct Manifest(ManifestHandle);
+
+/// The type of package manifest supported by the analyzer.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Display, EnumString, IntoStaticStr)]
+pub enum ManifestType {
+    /// Rust — `Cargo.lock` / `Cargo.toml` (`crates.io` ecosystem).
+    #[strum(to_string = "Cargo")]
+    Cargo,
+    /// Python — `uv.lock` / `pyproject.toml` (`PyPI` ecosystem).
+    #[strum(to_string = "Uv")]
+    Uv,
+}
 
 /// Errors returned by [`Manifest::extract`].
 #[derive(Debug, Error)]
@@ -27,6 +39,13 @@ pub enum ManifestError {
     /// The C library failed to extract packages from the provided bytes.
     #[error("extraction error: {0}")]
     Extraction(String),
+}
+
+impl ManifestType {
+    #[must_use]
+    pub fn as_str(self) -> &'static str {
+        self.into()
+    }
 }
 
 impl Manifest {
@@ -40,10 +59,10 @@ impl Manifest {
     /// - [`ManifestError::InvalidString`] if `ecosystem` contains an interior null byte.
     /// - [`ManifestError::Extraction`] if the extractor fails to parse `data`.
     pub fn extract(
-        ecosystem: &str,
         data: &[u8],
+        m_type: ManifestType,
     ) -> Result<Self, ManifestError> {
-        let c_ecosystem = CString::new(ecosystem)?;
+        let c_ecosystem = CString::new(m_type.as_str())?;
         let mut handle: ManifestHandle = 0;
         unsafe {
             let err = manifest_parse(
@@ -98,7 +117,7 @@ impl Drop for Manifest {
     }
 }
 
-/// An iterator over the [`Package`]s in a [`Manifest`].
+/// An iterator over the [`ManifestPackage`]s in a [`Manifest`].
 pub struct PackageIter<'a> {
     /// The source manifest.
     manifest: &'a Manifest,
@@ -107,7 +126,7 @@ pub struct PackageIter<'a> {
 }
 
 impl Iterator for PackageIter<'_> {
-    type Item = Result<Package, PackageError>;
+    type Item = Result<ManifestPackage, PackageError>;
 
     fn next(&mut self) -> Option<Self::Item> {
         if self.idx >= self.manifest.len() {
@@ -115,7 +134,7 @@ impl Iterator for PackageIter<'_> {
         }
         let idx = self.idx;
         self.idx = self.idx.saturating_add(1);
-        Some(Package::new(self.manifest.0, idx))
+        Some(ManifestPackage::new(self.manifest.0, idx))
     }
 }
 

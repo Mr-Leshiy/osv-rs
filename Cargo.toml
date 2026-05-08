@@ -53,6 +53,7 @@ missing_errors_doc = "allow"
 
 [workspace.dependencies]
 osv-types = { path = "osv-types", version="=0.1.0" }
+osv-db = { path = "osv-db", version="=0.6.2" }
 
 thiserror = "2"
 

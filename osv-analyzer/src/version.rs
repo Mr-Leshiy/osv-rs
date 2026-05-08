@@ -7,6 +7,7 @@ use std::{
     ffi::{CStr, CString, NulError, c_char, c_int, c_void},
 };
 
+use osv_types::Ecosystem;
 use thiserror::Error;
 
 use crate::ffi;
@@ -38,10 +39,10 @@ impl Version {
     /// - [`VersionError::Parse`]
     pub fn new(
         str: &str,
-        ecosystem: &str,
+        ecosystem: Ecosystem,
     ) -> Result<Self, VersionError> {
         let c_str = CString::new(str)?;
-        let c_ecosystem = CString::new(ecosystem)?;
+        let c_ecosystem = CString::new(ecosystem.as_str())?;
         let mut handle: VersionHandle = 0;
         unsafe {
             let err = version_new(c_str.as_ptr(), c_ecosystem.as_ptr(), &raw mut handle);

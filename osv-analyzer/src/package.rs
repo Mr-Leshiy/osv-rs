@@ -1,4 +1,4 @@
-//! [`Package`] — a single package extracted from a manifest file.
+//! [`ManifestPackage`] — a single package extracted from a manifest file.
 
 #![allow(clippy::module_name_repetitions)]
 
@@ -14,7 +14,7 @@ use crate::ffi;
 
 /// A single package extracted from a manifest file.
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
-pub struct Package {
+pub struct ManifestPackage {
     /// Package name.
     pub name: PackageName,
     /// Package version string.
@@ -23,7 +23,7 @@ pub struct Package {
     pub ecosystem: EcosystemWithSuffix,
 }
 
-/// Errors returned when constructing a [`Package`].
+/// Errors returned when constructing a [`ManifestPackage`].
 #[derive(Debug, Error)]
 pub enum PackageError {
     /// A C field accessor returned an error.
@@ -34,7 +34,7 @@ pub enum PackageError {
     UnknownEcosystem(#[from] strum::ParseError),
 }
 
-impl Package {
+impl ManifestPackage {
     /// Constructs a [`Package`] by reading the fields of the package at `idx`
     /// from the Go-managed manifest identified by `manifest`.
     ///

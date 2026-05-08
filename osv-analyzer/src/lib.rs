@@ -1,10 +1,14 @@
 //! Rust bindings for osv-scalibr ecosystem-aware version parsing and package extraction.
 
+pub mod evaluation;
 mod ffi;
 pub mod manifest;
 pub mod package;
 pub mod version;
 
-pub use manifest::{Manifest, ManifestError, PackageIter};
-pub use package::{Package, PackageError};
-pub use version::{Version, VersionError};
+pub use self::{
+    evaluation::evaluate,
+    manifest::{Manifest, ManifestError, ManifestType, PackageIter},
+    package::{ManifestPackage, PackageError},
+    version::{Version, VersionError},
+};
