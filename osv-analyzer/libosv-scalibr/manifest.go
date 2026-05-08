@@ -8,6 +8,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"runtime"
 	"runtime/cgo"
 	"unsafe"
 
@@ -93,4 +94,5 @@ func manifest_package_ecosystem(list C.manifest, idx C.size_t, out **C.char) *C.
 //export manifest_free
 func manifest_free(list C.manifest) {
 	cgo.Handle(list).Delete()
+	runtime.GC()
 }

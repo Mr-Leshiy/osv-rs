@@ -58,7 +58,7 @@ impl Manifest {
     ///
     /// - [`ManifestError::InvalidString`] if `ecosystem` contains an interior null byte.
     /// - [`ManifestError::Extraction`] if the extractor fails to parse `data`.
-    pub fn extract(
+    pub fn new(
         data: &[u8],
         m_type: ManifestType,
     ) -> Result<Self, ManifestError> {

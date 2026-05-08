@@ -5,6 +5,7 @@ package main
 */
 import "C"
 import (
+	"runtime"
 	"runtime/cgo"
 
 	"github.com/google/osv-scalibr/semantic"
@@ -37,4 +38,5 @@ func version_cmp(a C.version, b C.version, result *C.int) *C.char {
 //export version_free
 func version_free(ref C.version) {
 	cgo.Handle(ref).Delete()
+	runtime.GC()
 }

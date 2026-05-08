@@ -15,7 +15,7 @@ fn print_packages(
     manifest_type: ManifestType,
     data: &[u8],
 ) -> Result<(), ManifestError> {
-    let manifest = Manifest::extract(data, manifest_type)?;
+    let manifest = Manifest::new(data, manifest_type)?;
     println!("{label} ({} packages):", manifest.len());
     for pkg in manifest.iter() {
         let pkg = pkg.map_err(|e| ManifestError::Extraction(e.to_string()))?;
