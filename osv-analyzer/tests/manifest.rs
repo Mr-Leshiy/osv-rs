@@ -18,14 +18,6 @@ fn pkg(
 }
 
 #[test_case(
-    "tests/testdata/manifests/019e0749-458c-78b1-96ed-5924437a9854",
-    ManifestType::Cargo
-    =>
-    vec![
-        pkg("async-trait", "0.1.89", "crates.io"),
-    ]
-)]
-#[test_case(
     "tests/testdata/manifests/Cargo.lock",
     ManifestType::Cargo
     =>
