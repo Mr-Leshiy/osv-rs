@@ -1,7 +1,7 @@
 use std::{fmt::Display, str::FromStr};
 
 use serde::{Deserialize, Deserializer, Serialize, de};
-use strum::{Display, EnumString};
+use strum::{Display, EnumString, IntoStaticStr};
 
 /// Ecosystem name, optionally with a suffix (e.g. `"Debian:10"`).
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
@@ -9,7 +9,7 @@ pub struct EcosystemWithSuffix(Ecosystem, Option<String>);
 
 /// Represents an OSV ecosystem, as defined by the OSV schema.
 /// See <https://github.com/ossf/osv-schema/blob/main/validation/schema.json>
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Display, EnumString)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Display, EnumString, IntoStaticStr)]
 pub enum Ecosystem {
     #[strum(to_string = "AlmaLinux")]
     AlmaLinux,
@@ -107,6 +107,12 @@ pub enum Ecosystem {
     Wolfi,
     #[strum(to_string = "GIT")]
     Git,
+}
+
+impl Ecosystem {
+    pub fn as_str(self) -> &'static str {
+        self.into()
+    }
 }
 
 impl EcosystemWithSuffix {
@@ -242,6 +248,7 @@ mod tests {
         assert_eq!(expected, eco_from_str);
         assert_eq!(expected, eco_from_json);
         assert_eq!(expected.to_string(), osv_string);
+        assert_eq!(expected.as_str(), osv_string);
 
         let ews_from_str: EcosystemWithSuffix = osv_string.parse().unwrap();
         let ews_from_json: EcosystemWithSuffix = serde_json::from_value(json!(osv_string)).unwrap();

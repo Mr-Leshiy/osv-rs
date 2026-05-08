@@ -1,6 +1,6 @@
 //! Implements the evaluation algorithm from <https://ossf.github.io/osv-schema/#evaluation>.
 
-use osv_types::{Affected, Event, Range, RangeType};
+use osv_types::{Affected, Ecosystem, Event, Range, RangeType};
 
 use crate::{Version, package::ManifestPackage};
 
@@ -37,10 +37,8 @@ pub fn evaluate(
         .iter()
         .filter(|r| r.range_type != RangeType::GIT);
 
-    let ecosystem_str = p.ecosystem.ecosystem().to_string();
-    let ecosystem_str = ecosystem_str.as_str();
-    let version = Version::new(&p.version, ecosystem_str)?;
-    included_in_ranges(&version, filtered_ranges, ecosystem_str)
+    let version = Version::new(&p.version, p.ecosystem.ecosystem())?;
+    included_in_ranges(&version, filtered_ranges, p.ecosystem.ecosystem())
 }
 
 /// Evaluates whether a [`semver::Version`] falls within OSV vulnerability ranges.
@@ -53,14 +51,14 @@ pub fn evaluate(
 pub(crate) fn included_in_ranges<'a, I: Iterator<Item = &'a Range>>(
     version: &Version,
     ranges: I,
-    ecosystem_str: &str,
+    ecosystem: Ecosystem,
 ) -> anyhow::Result<bool> {
     for r in ranges {
         anyhow::ensure!(
             r.range_type != RangeType::GIT,
             "GIT range type is not compatible."
         );
-        if range_contains(version, &r.events, ecosystem_str)? {
+        if range_contains(version, &r.events, ecosystem)? {
             return Ok(true);
         }
     }
@@ -84,26 +82,26 @@ pub(crate) fn included_in_ranges<'a, I: Iterator<Item = &'a Range>>(
 fn range_contains(
     version: &Version,
     events: &[Event],
-    ecosystem_str: &str,
+    ecosystem: Ecosystem,
 ) -> anyhow::Result<bool> {
     let mut is_introduced = false;
     let mut is_fixed = false;
     let mut is_before_limits = true;
     for event in events {
         match event {
-            Event::Limit { limit } if version >= &Version::new(limit, ecosystem_str)? => {
+            Event::Limit { limit } if version >= &Version::new(limit, ecosystem)? => {
                 is_before_limits = false;
             },
             Event::Introduced { introduced }
-                if introduced == "0" || version >= &Version::new(introduced, ecosystem_str)? =>
+                if introduced == "0" || version >= &Version::new(introduced, ecosystem)? =>
             {
                 is_introduced = true;
             },
-            Event::Fixed { fixed } if version >= &Version::new(fixed, ecosystem_str)? => {
+            Event::Fixed { fixed } if version >= &Version::new(fixed, ecosystem)? => {
                 is_fixed = true;
             },
             Event::LastAffected { last_affected }
-                if version > &Version::new(last_affected, ecosystem_str)? =>
+                if version > &Version::new(last_affected, ecosystem)? =>
             {
                 is_fixed = true;
             },
@@ -113,16 +111,14 @@ fn range_contains(
     Ok(is_before_limits && is_introduced && !is_fixed)
 }
 
-
 #[cfg(test)]
 mod tests {
-    use osv_types::Event;
+    use osv_types::{Ecosystem, Event};
     use rand::seq::SliceRandom;
     use test_case::test_case;
 
-    use crate::Version;
-
     use super::range_contains;
+    use crate::Version;
 
     fn introduced(v: &str) -> Event {
         Event::Introduced {
@@ -148,26 +144,26 @@ mod tests {
         }
     }
 
-    #[test_case("1.5.0", "crates.io", &[] => false; "no events means no affected range")]
-    #[test_case("1.5.0", "crates.io", &[introduced("1.0.0"), fixed("2.0.0")] => true; "version inside introduced-fixed window")]
-    #[test_case("1.0.0", "crates.io", &[introduced("1.0.0"), fixed("2.0.0")] => true; "introduced bound is inclusive")]
-    #[test_case("2.0.0", "crates.io", &[introduced("1.0.0"), fixed("2.0.0")] => false; "fixed bound is exclusive")]
-    #[test_case("2.0.1", "crates.io", &[introduced("1.0.0"), fixed("2.0.0")] => false; "version above fixed bound is unaffected")]
-    #[test_case("0.9.0", "crates.io", &[introduced("1.0.0"), fixed("2.0.0")] => false; "version below introduced bound is unaffected")]
-    #[test_case("0.9.0", "crates.io", &[introduced("0"), fixed("2.0.0")] => true; "introduced zero matches all versions from the beginning")]
-    #[test_case("2.0.0", "crates.io", &[introduced("0"), last_affected("2.0.0")] => true; "last_affected bound is inclusive")]
-    #[test_case("2.0.1", "crates.io", &[introduced("0"), last_affected("2.0.0")] => false; "version above last_affected is unaffected")]
-    #[test_case("1.5.9", "crates.io", &[introduced("0"), limit("2.0.0")] => true; "version inside limit window")]
-    #[test_case("2.0.1", "crates.io", &[introduced("0"), limit("2.0.0")] => false; "limit bound is exclusive")]
+    #[test_case("1.5.0", Ecosystem::CratesIo, &[] => false; "no events means no affected range")]
+    #[test_case("1.5.0", Ecosystem::CratesIo, &[introduced("1.0.0"), fixed("2.0.0")] => true; "version inside introduced-fixed window")]
+    #[test_case("1.0.0", Ecosystem::CratesIo, &[introduced("1.0.0"), fixed("2.0.0")] => true; "introduced bound is inclusive")]
+    #[test_case("2.0.0", Ecosystem::CratesIo, &[introduced("1.0.0"), fixed("2.0.0")] => false; "fixed bound is exclusive")]
+    #[test_case("2.0.1", Ecosystem::CratesIo, &[introduced("1.0.0"), fixed("2.0.0")] => false; "version above fixed bound is unaffected")]
+    #[test_case("0.9.0", Ecosystem::CratesIo, &[introduced("1.0.0"), fixed("2.0.0")] => false; "version below introduced bound is unaffected")]
+    #[test_case("0.9.0", Ecosystem::CratesIo, &[introduced("0"), fixed("2.0.0")] => true; "introduced zero matches all versions from the beginning")]
+    #[test_case("2.0.0", Ecosystem::CratesIo, &[introduced("0"), last_affected("2.0.0")] => true; "last_affected bound is inclusive")]
+    #[test_case("2.0.1", Ecosystem::CratesIo, &[introduced("0"), last_affected("2.0.0")] => false; "version above last_affected is unaffected")]
+    #[test_case("1.5.9", Ecosystem::CratesIo, &[introduced("0"), limit("2.0.0")] => true; "version inside limit window")]
+    #[test_case("2.0.1", Ecosystem::CratesIo, &[introduced("0"), limit("2.0.0")] => false; "limit bound is exclusive")]
     fn range_contains_test(
         ver: &str,
-        ecosystem_str: &str,
+        ecosystem: Ecosystem,
         events: &[Event],
     ) -> bool {
-        let ver = Version::new(ver, ecosystem_str).unwrap();
+        let ver = Version::new(ver, ecosystem).unwrap();
         let mut events: Vec<Event> = events.to_vec();
         // passing an unordered events list
         events.shuffle(&mut rand::rng());
-        range_contains(&ver, &events, ecosystem_str).unwrap()
+        range_contains(&ver, &events, ecosystem).unwrap()
     }
 }
