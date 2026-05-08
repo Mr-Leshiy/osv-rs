@@ -1,6 +1,6 @@
 [package]
 name = "osv-types"
-version = "0.1.0"
+version = "0.1.1"
 description = "Rust types for OSV (Open Source Vulnerabilities) objects"
 readme = "README.md"
 edition.workspace = true
