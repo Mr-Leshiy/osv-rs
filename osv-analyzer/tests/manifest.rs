@@ -2,7 +2,7 @@
 
 #![allow(clippy::unwrap_used)]
 
-use osv_analyzer::{Manifest, ManifestPackage};
+use osv_analyzer::{Manifest, ManifestPackage, ManifestType};
 use test_case::test_case;
 
 fn pkg(
@@ -19,7 +19,7 @@ fn pkg(
 
 #[test_case(
     "tests/testdata/manifests/Cargo.lock",
-    "Cargo.lock"
+    ManifestType::Cargo
     =>
     vec![
         pkg("async-trait", "0.1.89", "crates.io"),
@@ -28,7 +28,7 @@ fn pkg(
 )]
 #[test_case(
     "tests/testdata/manifests/uv.lock",
-    "uv.lock"
+    ManifestType::Uv
     =>
     vec![
         pkg("anthropic", "0.84.0", "PyPI"),
@@ -37,9 +37,9 @@ fn pkg(
 )]
 fn extract_packages(
     manifest_path: &str,
-    ecosystem: &str,
+    m_type: ManifestType,
 ) -> Vec<ManifestPackage> {
     let data = std::fs::read(manifest_path).unwrap();
-    let manifest = Manifest::extract(ecosystem, &data).unwrap();
+    let manifest = Manifest::extract(&data, m_type).unwrap();
     manifest.iter().collect::<Result<Vec<_>, _>>().unwrap()
 }

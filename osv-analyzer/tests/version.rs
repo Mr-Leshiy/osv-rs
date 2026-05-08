@@ -10,34 +10,47 @@
 )]
 
 use osv_analyzer::Version;
+use osv_types::Ecosystem;
 use test_case::test_case;
 
-#[test_case("tests/testdata/versions/semver-versions.txt", "npm")]
-#[test_case("tests/testdata/versions/pypi-versions.txt", "PyPI")]
-#[test_case("tests/testdata/versions/pypi-versions-generated.txt", "PyPI")]
-#[test_case("tests/testdata/versions/debian-versions.txt", "Debian")]
-#[test_case("tests/testdata/versions/debian-versions-generated.txt", "Debian")]
-#[test_case("tests/testdata/versions/alpine-versions.txt", "Alpine")]
-#[test_case("tests/testdata/versions/alpine-versions-generated.txt", "Alpine")]
-#[test_case("tests/testdata/versions/maven-versions.txt", "Maven")]
-#[test_case("tests/testdata/versions/maven-versions-generated.txt", "Maven")]
-#[test_case("tests/testdata/versions/nuget-versions.txt", "NuGet")]
-#[test_case("tests/testdata/versions/rubygems-versions.txt", "RubyGems")]
-#[test_case("tests/testdata/versions/rubygems-versions-generated.txt", "RubyGems")]
+#[test_case("tests/testdata/versions/semver-versions.txt", Ecosystem::Npm)]
+#[test_case("tests/testdata/versions/pypi-versions.txt", Ecosystem::PyPI)]
+#[test_case("tests/testdata/versions/pypi-versions-generated.txt", Ecosystem::PyPI)]
+#[test_case("tests/testdata/versions/debian-versions.txt", Ecosystem::Debian)]
+#[test_case(
+    "tests/testdata/versions/debian-versions-generated.txt",
+    Ecosystem::Debian
+)]
+#[test_case("tests/testdata/versions/alpine-versions.txt", Ecosystem::Alpine)]
+#[test_case(
+    "tests/testdata/versions/alpine-versions-generated.txt",
+    Ecosystem::Alpine
+)]
+#[test_case("tests/testdata/versions/maven-versions.txt", Ecosystem::Maven)]
+#[test_case(
+    "tests/testdata/versions/maven-versions-generated.txt",
+    Ecosystem::Maven
+)]
+#[test_case("tests/testdata/versions/nuget-versions.txt", Ecosystem::NuGet)]
+#[test_case("tests/testdata/versions/rubygems-versions.txt", Ecosystem::RubyGems)]
+#[test_case(
+    "tests/testdata/versions/rubygems-versions-generated.txt",
+    Ecosystem::RubyGems
+)]
 // TODO: enable after https://github.com/google/osv-scalibr/pull/2074 is merged
-// #[test_case("tests/testdata/versions/hackage-versions.txt", "Hackage")]
-#[test_case("tests/testdata/versions/pub-versions.txt", "Pub")]
-#[test_case("tests/testdata/versions/cran-versions.txt", "CRAN")]
-#[test_case("tests/testdata/versions/cran-versions-generated.txt", "CRAN")]
-#[test_case("tests/testdata/versions/packagist-versions.txt", "Packagist")]
+// #[test_case("tests/testdata/versions/hackage-versions.txt", Ecosystem::Hackage)]
+#[test_case("tests/testdata/versions/pub-versions.txt", Ecosystem::Pub)]
+#[test_case("tests/testdata/versions/cran-versions.txt", Ecosystem::Cran)]
+#[test_case("tests/testdata/versions/cran-versions-generated.txt", Ecosystem::Cran)]
+#[test_case("tests/testdata/versions/packagist-versions.txt", Ecosystem::Packagist)]
 #[test_case(
     "tests/testdata/versions/packagist-versions-generated.txt",
-    "Packagist"
+    Ecosystem::Packagist
 )]
-#[test_case("tests/testdata/versions/redhat-versions.txt", "Red Hat")]
+#[test_case("tests/testdata/versions/redhat-versions.txt", Ecosystem::RedHat)]
 fn compare_versions(
     path: &str,
-    ecosystem: &str,
+    ecosystem: Ecosystem,
 ) {
     let content = std::fs::read_to_string(path).unwrap();
 
@@ -73,7 +86,7 @@ fn compare_versions(
 
 #[test]
 fn different_ecosystems_are_incomparable() {
-    let a = Version::new("1.2.3", "npm").unwrap();
-    let b = Version::new("1.2.3", "PyPI").unwrap();
+    let a = Version::new("1.2.3", Ecosystem::Npm).unwrap();
+    let b = Version::new("1.2.3", Ecosystem::PyPI).unwrap();
     assert_ne!(a, b);
 }

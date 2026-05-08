@@ -8,7 +8,7 @@ pub mod version;
 
 pub use self::{
     evaluation::evaluate,
-    manifest::{Manifest, ManifestError, PackageIter},
+    manifest::{Manifest, ManifestError, ManifestType, PackageIter},
     package::{ManifestPackage, PackageError},
     version::{Version, VersionError},
 };
