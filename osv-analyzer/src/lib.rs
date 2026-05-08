@@ -2,13 +2,11 @@
 
 pub mod evaluation;
 mod ffi;
-pub mod manifest;
 pub mod package;
 pub mod version;
 
 pub use self::{
-    evaluation::evaluate,
-    manifest::{Manifest, ManifestError, ManifestType, PackageIter},
-    package::{ManifestPackage, PackageError},
+    evaluation::analyze,
+    package::Package,
     version::{Version, VersionError},
 };

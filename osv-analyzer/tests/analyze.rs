@@ -1,4 +1,4 @@
-//! [`osv_analyzer::evaluate`] tests
+//! [`osv_analyzer::analyze`] tests
 //!
 //! OSV records used by these tests live in `tests/testdata/osv_records/`.
 //! To add a new record, use the fetch script:
@@ -11,7 +11,7 @@
 
 #![allow(clippy::unwrap_used)]
 
-use osv_analyzer::{ManifestPackage, evaluate};
+use osv_analyzer::{Package, analyze};
 use osv_types::OsvRecord;
 use test_case::test_case;
 
@@ -19,8 +19,8 @@ fn pkg(
     name: &str,
     version: &str,
     ecosystem: &str,
-) -> ManifestPackage {
-    ManifestPackage {
+) -> Package {
+    Package {
         name: name.to_owned(),
         version: version.to_owned(),
         ecosystem: ecosystem.parse().unwrap(),
@@ -34,7 +34,7 @@ fn pkg(
 #[test_case(pkg("github.com/Tencent/WeKnora", "0.3.0", "Go"), "GHSA-8rf9-c59g-f82f" => false)]
 #[allow(clippy::needless_pass_by_value)]
 fn evaluate_against_osv_record(
-    p: ManifestPackage,
+    p: Package,
     osv_record_id: &str,
 ) -> bool {
     let path = format!("tests/testdata/osv_records/{osv_record_id}.json");
@@ -43,5 +43,5 @@ fn evaluate_against_osv_record(
     record
         .affected
         .iter()
-        .any(|affected| evaluate(&p, affected).unwrap())
+        .any(|affected| analyze(&p, affected).unwrap())
 }

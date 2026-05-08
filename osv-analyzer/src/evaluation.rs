@@ -2,11 +2,11 @@
 
 use osv_types::{Affected, Ecosystem, Event, Range, RangeType};
 
-use crate::{Version, package::ManifestPackage};
+use crate::{Version, package::Package};
 
 /// Implements the evaluation algorithm from <https://ossf.github.io/osv-schema/#evaluation>.
-pub fn evaluate(
-    p: &ManifestPackage,
+pub fn analyze(
+    p: &Package,
     affected: &Affected,
 ) -> anyhow::Result<bool> {
     let Some(ref pkg) = affected.package else {
