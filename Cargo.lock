@@ -1365,6 +1365,7 @@ dependencies = [
  "anyhow",
  "osv-types",
  "rand 0.10.1",
+ "serde_json",
  "strum",
  "test-case",
  "thiserror 2.0.18",

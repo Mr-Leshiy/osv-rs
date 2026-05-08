@@ -22,3 +22,4 @@ anyhow = "1.0.102"
 [dev-dependencies]
 test-case.workspace = true
 rand = "0.10"
+serde_json.workspace = true
