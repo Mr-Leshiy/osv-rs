@@ -1,6 +1,6 @@
 [package]
 name = "osv-db"
-version = "0.6.2"
+version = "0.6.3"
 description = "A Rust library for syncing and querying the OSV (Open Source Vulnerabilities) database"
 readme = "README.md"
 edition.workspace = true
