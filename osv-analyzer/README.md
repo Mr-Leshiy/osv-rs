@@ -22,30 +22,6 @@ flowchart TD
 
 - **Go 1.24+** — the Go toolchain is required to compile the embedded library.
 
-## Usage
-
-```rust
-use osv_analyzer::Version;
-
-// Parse two npm versions
-let v1 = Version::new("1.2.3", "npm").unwrap();
-let v2 = Version::new("1.10.0", "npm").unwrap();
-
-assert!(v1 < v2);
-
-// Parse a PyPI version
-let a = Version::new("1.0a1", "PyPI").unwrap();
-let b = Version::new("1.0", "PyPI").unwrap();
-
-assert!(a < b);
-
-// Versions from different ecosystems are incomparable
-let npm = Version::new("1.0.0", "npm").unwrap();
-let pypi = Version::new("1.0.0", "PyPI").unwrap();
-
-assert_eq!(npm.partial_cmp(&pypi), None);
-```
-
 ## Examples
 
 More examples can be found in the [`examples/`](examples/) directory.
