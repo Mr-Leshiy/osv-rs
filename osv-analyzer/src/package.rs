@@ -6,8 +6,7 @@ use osv_types::{EcosystemWithSuffix, PackageName};
 
 /// A single dependency pinned in a project's lock file.
 ///
-/// Produced by [`crate::Extractor`] after scanning a folder. Each value
-/// represents one package at an exact version inside a specific OSV ecosystem,
+/// Each value represents one package at an exact version inside a specific OSV ecosystem,
 /// which is the minimum information needed to query vulnerability records.
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct Package {
