@@ -117,7 +117,7 @@ impl Drop for Manifest {
     }
 }
 
-/// An iterator over the [`Package`]s in a [`Manifest`].
+/// An iterator over the [`ManifestPackage`]s in a [`Manifest`].
 pub struct PackageIter<'a> {
     /// The source manifest.
     manifest: &'a Manifest,

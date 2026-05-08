@@ -1,4 +1,4 @@
-//! [`Package`] — a single package extracted from a manifest file.
+//! [`ManifestPackage`] — a single package extracted from a manifest file.
 
 #![allow(clippy::module_name_repetitions)]
 
@@ -23,7 +23,7 @@ pub struct ManifestPackage {
     pub ecosystem: EcosystemWithSuffix,
 }
 
-/// Errors returned when constructing a [`Package`].
+/// Errors returned when constructing a [`ManifestPackage`].
 #[derive(Debug, Error)]
 pub enum PackageError {
     /// A C field accessor returned an error.
