@@ -8,6 +8,11 @@ license.workspace = true
 authors.workspace = true
 repository.workspace = true
 
+[features]
+# If provided use `-buildmode=c-shared` for dynamic linkage,
+# otherwise `-buildmode=c-archive` for static linkage
+shared = []
+
 [lints]
 workspace = true
 

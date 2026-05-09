@@ -34,10 +34,16 @@ fn main() {
     let out_dir = PathBuf::from(env::var("OUT_DIR").unwrap());
     let lib_out = out_dir.join("libosv-scalibr.a");
 
+    let build_mode = if cfg!(feature = "shared") {
+        "-buildmode=c-shared"
+    } else {
+        "-buildmode=c-archive"
+    };
+
     let status = Command::new("go")
         .args([
             "build",
-            "-buildmode=c-archive",
+            build_mode,
             "-o",
             lib_out.to_str().expect("lib_out path is not valid UTF-8"),
             ".",
@@ -49,7 +55,11 @@ fn main() {
     assert!(status.success(), "go build failed");
 
     println!("cargo:rustc-link-search=native={}", out_dir.display());
-    println!("cargo:rustc-link-lib=static=osv-scalibr");
+    if cfg!(feature = "shared") {
+        println!("cargo:rustc-link-lib=dylib=osv-scalibr");
+    } else {
+        println!("cargo:rustc-link-lib=static=osv-scalibr");
+    }
 
     if cfg!(target_os = "macos") {
         println!("cargo:rustc-link-lib=framework=CoreFoundation");
