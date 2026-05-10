@@ -1,12 +1,17 @@
 [package]
 name = "osv-analyzer"
-version = "0.2.0"
+version = "0.3.0"
 description = "Rust bindings for the osv-scalibr functionality."
 readme = "README.md"
 edition.workspace = true
 license.workspace = true
 authors.workspace = true
 repository.workspace = true
+
+[features]
+# If provided use `-buildmode=c-shared` for dynamic linkage,
+# otherwise `-buildmode=c-archive` for static linkage
+shared = []
 
 [lints]
 workspace = true
