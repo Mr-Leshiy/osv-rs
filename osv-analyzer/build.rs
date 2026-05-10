@@ -39,9 +39,9 @@ fn main() {
     let shared = cfg!(feature = "shared");
 
     let lib_filename = match (shared, target_os.as_str()) {
-        (false, _) => "libcue.a",
-        (true, "macos") => "libcue.dylib",
-        (true, _) => "libcue.so",
+        (false, _) => "osv-scalibr.a",
+        (true, "macos") => "osv-scalibr.dylib",
+        (true, _) => "osv-scalibr.so",
     };
     let lib_out = out_dir.join(lib_filename);
 
