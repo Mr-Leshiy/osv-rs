@@ -79,7 +79,6 @@ fn main() {
     }
 }
 
-
 fn link_shared(
     out_dir: &Path,
     lib_filename: &str,
