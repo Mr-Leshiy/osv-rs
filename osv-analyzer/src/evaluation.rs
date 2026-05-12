@@ -13,7 +13,7 @@ pub fn analyze(
         return Ok(false);
     };
 
-    if p.ecosystem.ecosystem() != pkg.ecosystem.ecosystem() {
+    if p.ecosystem != pkg.ecosystem {
         return Ok(false);
     }
 
